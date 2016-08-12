@@ -1,0 +1,20 @@
+<!-- fornecedores.html -->
+<div class="container" ng-if="$rootScope.acao == 'listar'">
+	<div class="page-header">
+		<button class="btn btn-success input-large" ng-click="cadastrarFornecedor()">CADASTRAR</button>
+	</div>
+	<table class="table table-striped">
+		<thead>
+			<th>Razão Social</th><th>Nome Fantasia</th><th>Contato</th><th>Telefone</th><th>Ações</th>
+		</thead>
+	    <tbody>
+	      <tr ng-repeat="fornecedor in fornecedores">
+	      	<td data-id="{{fornecedor.$id}}">{{fornecedor.razao_social}}<span ng-if="fornecedor.nome_fantasia"><br />{{fornecedor.nome_fantasia}}</span></td><td>{{fornecedor.nome_fantasia}}</td><td>{{fornecedor.nome_contato}}</td><td>{{fornecedor.telefone_principal}}</td><td><a href="#" ng-click="confirmaAcao(fornecedor)">[excluir]</a><a href="#" ng-click="editarFornecedor(fornecedor)">[editar]</a></td>
+	      </tr>
+	    </tbody>
+	  </table>
+</div>
+<div class="container" ng-if="$rootScope.acao == 'editar'">
+	<span>EDITAR</span>
+	<button ng-click="listar()">LISTAR</button>
+</div>

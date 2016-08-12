@@ -1,0 +1,19 @@
+<!-- tarefas.html -->
+<div class="container">
+	<div class="page-header">
+		<form ng-submit="addTarefa()">
+			<div class="input-group">
+			  <input ng-model="tarefa.nova" class="form-control input-lg" placeholder="Nova tarefa ..."/>
+			  <span class="input-group-btn"><button type="submit" class="btn btn-success input-lg">Adicionar</button></span>
+			</div>
+		</form>
+	</div>
+	
+	<table class="table table-striped">
+	    <tbody>
+	      <tr ng-repeat="tarefa in tarefas">
+	      	<td><button type="button" class="hide" ng-click="tarefas.$remove(tarefa)"><span aria-hidden="true">&times;</span></button><button type="button" class="close" ng-click="confirmaAcao(tarefa)"><span aria-hidden="true">&times;</span></button>{{tarefa.data | date:"dd/MM/yyyy"}} - {{tarefa.nome}}</td>
+	      </tr>
+	    </tbody>
+	  </table>
+</div>
