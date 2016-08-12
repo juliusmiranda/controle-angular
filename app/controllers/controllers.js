@@ -56,9 +56,9 @@ app.controller('FornecedoresCtrl', function($rootScope, $location, $firebaseArra
   	};
 
   	$rootScope.editarFornecedor = function(fornecedor){
-  		console.log(fornecedor.$id);
-  		//$location.path('/cadastrar_fornecedores/'+123);
-  		$rootScope.acao = "editar";
+  		//console.log(fornecedor.$id);
+  		$location.path('/editar_fornecedores/'+fornecedor.$id);
+  		//$rootScope.acao = "editar";
   	};
 
 	$rootScope.cadastrarFornecedor = function(){
