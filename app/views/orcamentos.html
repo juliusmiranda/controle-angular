@@ -1,0 +1,58 @@
+<!-- orcamento.html -->
+<div class="container">
+	<div class="row">
+		<div class="page-header">
+			<h3 class="alert alert-success">ORÇAMENTOS</h3>
+			{{orcamento}}
+		</div>
+	</div>
+	<div class="row">
+		<form>
+		<div class="row">
+			<div class="form-group col-md-2">
+				<label>Data</label>
+				<input class="form-control data" ng-model="orcamento.data">
+			</div>
+			<div class="form-group col-md-2">
+				<label>Número</label>
+				<input class="form-control" ng-model="orcamento.numero">
+			</div>
+			<div class="form-group col-md-8">
+				<label>Itens cotados</label>
+				<textarea class="form-control" ng-model="orcamento.itens"></textarea>
+			</div>
+		</div>
+		<div class="row">
+			<div class="form-group col-md-12">
+				<fieldset>
+					<legend>Cotações</legend>
+					<div ng-repeat="(key,cotacao) in orcamento.cotacoes" class="row">
+						<div class="form-group col-md-2">
+							<label>Data</label>
+							<input class="form-control data" ng-model="orcamento.cotacoes[key].data" placeholder="__/__/2016" ng-focus="data()">
+						</div>
+						<div class="form-group col-md-4">
+							<label>Empresa</label>
+							<select ng-model="orcamento.cotacoes[key].empresa">
+								<option ng-repeat="empresa in empresas" value="{{empresa.$id}}">{{empresa.razao_social}}</option>
+							</select>
+						</div>
+					</div>
+				</fieldset>
+			</div>
+		</div>
+			<button class="btn btn-success" ng-click="novaCotacao()">Nova cotação</button>
+		</form>
+	</div>
+	<table class="table table-striped">
+		<thead>
+			<th>Data</th><th>Número</th><th>Itens</th><th>Status</th><th>Ação</th>
+		</thead>
+		<tbody>
+			<tr ng-repeat="orcamento in orcamentos">
+				<td>{{orcamento.data}}</td><td>{{orcamento.numero}}</td><td>{{orcamento.itens}}</td><td>{{orcamento.status}}</td><td><button ng-click="orcamentos.$remove(orcamento)">Apagar</button></td>
+			</tr>
+		</tbody>
+	</table>
+	<button ng-click="teste()">Adiciona teste</button>
+</div>

@@ -3,16 +3,10 @@ app.controller('HomeCtrl', function($scope, $location)
    $scope.activetab = $location.path();
 });
 
-app.controller('SobreCtrl', function($scope, $location)
-{
-   $scope.activetab = $location.path();
-});
-
 app.controller('ContatoCtrl', function($scope, $location)
 {
    $scope.activetab = $location.path();
 });
-
 
 app.controller('FornecedoresCtrl', function($scope, $location, $firebaseArray, $http, $routeParams){
 	$scope.activetab = '/fornecedores';
@@ -146,19 +140,75 @@ app.controller('TarefasCtrl', function($scope, $location, $firebaseArray){
   	};
 });
 
-app.controller('OrcamentoCtrl', function($scope, $location, $firebaseArray)
+app.controller('OrcamentosCtrl', function($scope, $location, $firebaseArray, $filter)
 {	
 	$scope.activetab = $location.path();
 	ref = new Firebase("https://testebhlog0.firebaseio.com/orcamentos");
-	$scope.dados = {};
+	$scope.hoje = new Date();
+	$scope.hoje = $filter('date')($scope.hoje, 'dd/MM/yyyy');
+	$scope.orcamento = {data: $scope.hoje, cotacoes: [{
+		data: "",
+		empresa: "",
+		orcamento: "",
+		valor: "",
+		aprovacao1: false,
+		aprovacao2: false,
+		status: "Cotando"
+	}]};
+	$scope.orcamentos = $firebaseArray(ref);
 	
-	  $scope.messages = $firebaseArray(ref);
-	  
-	  
-	$scope.addMessage = function() {
 
-		$scope.messages.$add({
-			nome : $scope.dados.novo
-		});
+	emp = new Firebase("https://testebhlog0.firebaseio.com/fornecedores");
+	$scope.empresas = $firebaseArray(emp);
+	$scope.addOrcamento = function(orcamento) {
+		$scope.orcamentos.$add(orcamento);
 	};
+
+
+	$scope.novaCotacao = function(){
+		$scope.orcamento.cotacoes.push({
+			data: "",
+			empresa: "",
+			orcamento: "",
+			valor: "",
+			aprovacao1: false,
+			aprovacao2: false,
+			status: "Cotando"
+		});
+		jQuery('.data').mask('99/99/9999');
+	}
+
+	$scope.data = function(){
+		jQuery('.data').mask('99/99/9999');
+	}
+
+	$scope.teste = function(){
+		$scope.orcamentos.$add({
+		  "numero": 321654987,
+		  "data": "12/08/2011",
+		  "itens": "Descritivo dos produtos cotados",
+		  "cotacoes": [
+		    {
+		      "data": "21/12/2016",
+		      "empresa" : "Empresa cadastrada",
+		      "orcamento": "Descrição da cotaçao",
+		      "valor": "R$ 125,00",
+		      "aprovacao1": true,
+		      "aprovacao2": true,
+		      "status": "Aprovado"
+		    },
+		    {
+		    "data": "12/01/2017",
+		    "empresa" : "Empresa cadastrada 2",
+		    "orcamento": "Descrição da cotaçao 2",
+		    "valor": "R$ 665,00",
+		    "aprovacao1": true,
+		    "aprovacao2": false,
+		    "status": "Reprovado"
+		  }],
+		  "status": true
+		});
+	}
+
+	jQuery('.data').mask('99/99/9999');
 });

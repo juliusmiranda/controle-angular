@@ -30,27 +30,9 @@ app.config(function($routeProvider, $locationProvider)
       controller : 'FornecedoresCtrl',
    })
 
-   .when('/editar_fornecedores', {
-   	  templateUrl : 'app/views/editar_fornecedores.html',
-   	  controller : 'FornecedoresCtrl',
-   })
-
-   .when('/editar_fornecedores/:fornecedor', {
-   	  templateUrl : 'app/views/editar_fornecedores.html',
-   	  controller : 'FornecedoresCtrl',
-   })
-
-
-   .when('/cadastrar_fornecedores', {
-      templateUrl : 'app/views/cadastrar_fornecedores.html',
-      controller : 'FornecedoresCtrl',
-   })
-
-   
-
-   .when('/orcamento', {
-      templateUrl : 'app/views/orcamento.html',
-      controller  : 'OrcamentoCtrl',
+   .when('/orcamentos', {
+      templateUrl : 'app/views/orcamentos.html',
+      controller  : 'OrcamentosCtrl',
    })
    
    .when('/tarefas', {
