@@ -1,123 +1,164 @@
-app.controller('HomeCtrl', function($rootScope, $location)
+app.controller('HomeCtrl', function($scope, $location)
 {
-   $rootScope.activetab = $location.path();
+   $scope.activetab = $location.path();
 });
 
-app.controller('SobreCtrl', function($rootScope, $location)
+app.controller('SobreCtrl', function($scope, $location)
 {
-   $rootScope.activetab = $location.path();
+   $scope.activetab = $location.path();
 });
 
-app.controller('ContatoCtrl', function($rootScope, $location)
+app.controller('ContatoCtrl', function($scope, $location)
 {
-   $rootScope.activetab = $location.path();
+   $scope.activetab = $location.path();
 });
 
-app.controller('FornecedoresCtrl', function($rootScope, $location, $firebaseArray, $http, $routeParams){
-	$rootScope.activetab = '/fornecedores';
+
+app.controller('FornecedoresCtrl', function($scope, $location, $firebaseArray, $http, $routeParams){
+	$scope.activetab = '/fornecedores';
+	$scope.fornecedor = {};
 	ref = new Firebase("https://testebhlog0.firebaseio.com/fornecedores");
-	$rootScope.fornecedores = $firebaseArray(ref);
-	$rootScope.acao = 'listar';
+
+	$scope.edita = [];
+	$scope.fornecedores = $firebaseArray(ref);
 	
-	$rootScope.param = $routeParams.param;
-	console.log($rootScope.param);
+	$scope.buscaCep = function($event, c){
+	    var keyCode = $event.which || $event.keyCode;
+		    if (keyCode === 13) {
+		        $scope.buscaCEP(c);
+		    }
 
-	$rootScope.home = function(){
-		$location.path('/fornecedores');
-	}
+	  };
+	$scope.buscaCnpj = function($event, c){
+	    var keyCode = $event.which || $event.keyCode;
+		    if (keyCode === 13) {
+		        $scope.buscaCNPJ(c);
+		    }
 
-	$rootScope.buscaCep = function(c){
-		/* BUSCAR CEP */
+	  };
+
+	$scope.proximo = function($event, el){
+		var keyCode = $event.which || $event.keyCode;
+	    if (keyCode === 13) {
+	        $(".form-control:eq("+el+")").focus();
+	    }
+	  };
+
+		
+	$scope.buscaCNPJ = function(c){
 		c = c.toString();
-		tmp = parseInt(c.replace(/[^0-9\.]/g, ''), 10);
-		var cep = 'https://viacep.com.br/ws/'+tmp+'/json/';
-		jQuery.ajax({
-	        async: true,
-	        url: cep,
-	        dataType: 'jsonp',
-	        method: "GET",
-	        error: function (jqXHR, textStatus, errorThrown) {
-	            console.log(textStatus + ': ' + errorThrown);
-	        },
-	        success: function (data, textStatus, jqXHR) {
-	            if (data.Error || data.Response) {
-	                exists = 0;
+		tmp = c.replace(/[^0-9]/g, '');
+		$http.get('/cnpj.php?cnpj='+tmp).then(function(response){
+			console.log(response.data);
+			if(response.data.status == "ERROR"){
+				if(response.data.message){
+					alert(response.data.message);
+					$(".form-control:eq(0)").focus();
+					$(".form-control:eq(0)").select();
+				}
+			}else{
+				$scope.fornecedor.razao_social = response.data.nome;
+				$scope.fornecedor.nome_fantasia = response.data.fantasia;
+				$scope.fornecedor.email = response.data.email;
+				$scope.fornecedor.telefone = response.data.telefone;
+				$scope.fornecedor.cep = response.data.cep;
+				$scope.fornecedor.logradouro = response.data.logradouro;
+				$scope.fornecedor.numero = response.data.numero;
+	            $scope.fornecedor.bairro = response.data.bairro;
+	            $scope.fornecedor.cidade = response.data.municipio;
+	            $scope.fornecedor.estado = response.data.uf;
+	            if(response.data.fantasia == ""){
+	            	$(".form-control:eq(2)").focus();	
+	            }else{
+	            	$(".form-control:eq(3)").focus();	
 	            }
-	            console.log(data);
-	        }
-	    });	
-	}
-		
-	$rootScope.confirmaAcao = function(fornecedor){
-  		check = confirm("Certeza absoluta?");
-  		if(check){
-  			$rootScope.fornecedores.$remove(fornecedor);
-  		}
-  	};
-
-  	$rootScope.editarFornecedor = function(fornecedor){
-  		//console.log(fornecedor.$id);
-  		$location.path('/editar_fornecedores/'+fornecedor.$id);
-  		//$rootScope.acao = "editar";
-  	};
-
-	$rootScope.cadastrarFornecedor = function(){
-		//window.location.assign('/#/cadastrar/fornecedores');
-		$location.path('/cadastrar_fornecedores');
-		console.log($location.path());
-		
-	}
-
-	$rootScope.salvarRegistro = function(fornecedor){
-		$rootScope.fornecedores.$add(fornecedor);
-	}
-
-	$rootScope.listar = function(){
-		$rootScope.acao = 'listar';
-	}
-
-});
-
-app.controller('TarefasCtrl', function($rootScope, $location, $firebaseArray){
-   $rootScope.activetab = $location.path();
-   ref = new Firebase("https://testebhlog0.firebaseio.com/tarefas");
-	$rootScope.tarefa = {};
-	$rootScope.tarefas = $firebaseArray(ref);
-	  
-	$rootScope.addTarefa = function() {
-		var date = new Date();
-		$rootScope.dia = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2);
-		console.log($rootScope.dia);
-		$rootScope.tarefas.$add({
-			data : $rootScope.dia,
-			nome : $rootScope.tarefa.nova
+			}
+			
 		});
-		$rootScope.tarefa.nova = '';
+	}
+
+	$scope.buscaCEP = function(c){
+		c = c.toString();
+		tmp = c.replace(/[^0-9]/g, '');
+		$http.get('https://viacep.com.br/ws/'+tmp+'/json').then(function(response){
+			$scope.fornecedor.logradouro = response.data.logradouro;
+            $scope.fornecedor.bairro = response.data.bairro;
+            $scope.fornecedor.cidade = response.data.localidade;
+            $scope.fornecedor.estado = response.data.uf;
+            $(".form-control:eq(8)").focus();
+		});
+	}
+
+	$scope.removeRegistro = function(fornecedor){
+  		$scope.fornecedores.$remove(fornecedor);
   	};
 
-  	$rootScope.confirmaAcao = function(tarefa){
+	$scope.salvarRegistro = function(fornecedor, id){
+		if(id != undefined){
+			n = new Firebase("https://testebhlog0.firebaseio.com/fornecedores");
+			result = n.child(id);
+			delete fornecedor.$id;
+			delete fornecedor.$priority;
+			result.update(fornecedor);
+			delete $scope.editar;
+			$scope.fornecedor = {};
+		}else{
+			$scope.fornecedores.$add(fornecedor);
+			$scope.fornecedor = {};
+		}
+	};
+
+	$scope.editarFornecedor = function(fornecedor,id){
+		$scope.editar = "True";
+		dst = angular.extend($scope.fornecedor, fornecedor);
+	};
+
+	$scope.cancelarCadastro = function(){
+		delete $scope.editar;
+		$scope.fornecedor = {};
+	}
+
+
+});
+
+app.controller('TarefasCtrl', function($scope, $location, $firebaseArray){
+   $scope.activetab = $location.path();
+   ref = new Firebase("https://testebhlog0.firebaseio.com/tarefas");
+	$scope.tarefa = {};
+	$scope.tarefas = $firebaseArray(ref);
+	  
+	$scope.addTarefa = function() {
+		var date = new Date();
+		$scope.dia = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2);
+		console.log($scope.dia);
+		$scope.tarefas.$add({
+			data : $scope.dia,
+			nome : $scope.tarefa.nova
+		});
+		$scope.tarefa.nova = '';
+  	};
+
+  	$scope.confirmaAcao = function(tarefa){
   		check = confirm("Certeza absoluta?");
   		if(check){
-  			$rootScope.tarefas.$remove(tarefa);
+  			$scope.tarefas.$remove(tarefa);
   		}
   	};
 });
 
-app.controller('OrcamentoCtrl', function($rootScope, $location, $firebaseArray)
+app.controller('OrcamentoCtrl', function($scope, $location, $firebaseArray)
 {	
-	$rootScope.activetab = $location.path();
+	$scope.activetab = $location.path();
 	ref = new Firebase("https://testebhlog0.firebaseio.com/orcamentos");
-	$rootScope.dados = {};
-	  // create a synchronized array
+	$scope.dados = {};
 	
-	  $rootScope.messages = $firebaseArray(ref);
+	  $scope.messages = $firebaseArray(ref);
 	  
-	  // add new items to the array
-	  // the message is automatically added to our Firebase database!
-	$rootScope.addMessage = function() {
+	  
+	$scope.addMessage = function() {
 
-		$rootScope.messages.$add({
-			nome : $rootScope.dados.novo
+		$scope.messages.$add({
+			nome : $scope.dados.novo
 		});
 	};
 });

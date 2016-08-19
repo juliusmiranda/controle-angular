@@ -2,6 +2,7 @@
 <html ng-app="app">
    <head>
       <meta name="viewport" content="width=device-width">
+      <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
       <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
       <meta http-equiv="content-language" content="pt-br" />
       <title>BH LOG</title>
@@ -10,16 +11,19 @@
    </head>
 
    <body>
-      <ul class="nav nav-tabs">
-         <li ng-class="{active: activetab == '/'}"><a href="/#/home">Home</a></li>
-         <li ng-class="{active: activetab == '/fornecedores'}"><a href="/#/fornecedores">Fornecedores</a></li>
-         <li ng-class="{active: activetab == '/sobre'}"><a href="/#/sobre">Sobre</a></li>
-         <li ng-class="{active: activetab == '/contato'}"><a href="/#/contato">Contato</a></li>
-         <li ng-class="{active: activetab == '/orcamento'}"><a href="/#/orcamento">Orçamento</a></li>
-         <li ng-class="{active: activetab == '/tarefas'}"><a href="/#/tarefas">Tarefas</a></li>
+      <div class="container">
+         <div class="row">
+            <ul class="nav nav-tabs">
+               <li ng-class="{active: activetab == '/'}"><a href="/#/home">Home</a></li>
+               <li ng-class="{active: activetab == '/fornecedores'}"><a href="/#/fornecedores">Fornecedores</a></li>
+               <li ng-class="{active: activetab == '/sobre'}"><a href="/#/sobre">Sobre</a></li>
+               <li ng-class="{active: activetab == '/contato'}"><a href="/#/contato">Contato</a></li>
+               <li ng-class="{active: activetab == '/orcamento'}"><a href="/#/orcamento">Orçamento</a></li>
+               <li ng-class="{active: activetab == '/tarefas'}"><a href="/#/tarefas">Tarefas</a></li>
 
-      </ul>
-
+            </ul>
+         </div>
+      </div>
       <div ng-view></div>
 
       <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>

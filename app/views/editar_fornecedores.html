@@ -1,6 +1,14 @@
 <!-- editar_fornecedores.html -->
 <div class="container">
 	<div class="page-header">
-		Editar {{fornecedor.$id}}
+		<h3>Editar Fornecedor </h3>
+	</div>
+	<div class="editar"> 
+		<form>
+			<div ng-repeat="(key,value) in edita" class="col-md-6 form-group">
+				<label>{{value[0] | uppercase}}</label>
+				<input class="form-control" type="text" value="{{value[1]}}" placeholder="{{value[0]}}">	
+			</div>
+		</form>
 	</div>
 </div>
